@@ -1,0 +1,59 @@
+!!!
+%html
+  %head
+    %meta{ 'http-equiv' => 'Content-Type', content: 'text/html; charset=utf-8' }
+    :css
+      a {
+        color: #00a;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      table {
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      td, th {
+        border: 1px #000 solid;
+        padding: 0.2em 0.5em;
+        vertical-align: top;
+      }
+
+      th {
+        background-color: #ddd;
+      }
+
+      tr.odd td {
+        background-color: #eee;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+      }
+    %title FB events
+
+  %body
+    %h1 Events that my friends are attending
+    %table
+      %tr
+        %th Name
+        %th Date and time
+        %th Participants
+      - counter = 0
+      - events.each do |event|
+      - counter = counter + 1
+        %tr{ class: counter % 2 == 0 ? 'odd' : 'even' }
+          %td
+            %a{ href: "https://www.facebook.com/events/#{event.id}" }
+              = event.name
+          %td= event.datetime ? event.datetime.strftime('%d.%m.%Y, %H:%M') : ''
+          %td
+            %ul
+              - event.participants.each do |participant|
+                %li= participant
