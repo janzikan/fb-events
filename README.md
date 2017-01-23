@@ -9,7 +9,7 @@ bundle
 ```
 
 ## Facebook acount
-In order to be able to get data from Facebook you need an account. Rename **.env.example** file to **.env** and modify the file so it would contain real FB account login credentials.
+In order to be able to get data from Facebook you need an account. Rename **.env.example** file to **.env** and modify the file so it would contain real FB account login credentials. Two Factor Authentication (2FA) has to be turned off, otherwise the tool will not be able to log into your account.
 
 ## Usage
 Simply use the following command
