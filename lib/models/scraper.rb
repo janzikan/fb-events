@@ -12,6 +12,7 @@ class Scraper
 
   def initialize
     @session = Capybara::Session.new(:webkit)
+    @session.driver.header('User-Agent', 'Mozilla')
   end
 
   def login
