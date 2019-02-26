@@ -36,6 +36,7 @@ end
 events = EventsList.events
 
 if events.empty?
+  puts ''
   puts 'No events to export'
   exit
 end
