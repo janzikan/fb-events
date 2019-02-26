@@ -1,33 +1,37 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.4.0)
-    capybara (2.7.1)
+    addressable (2.6.0)
+      public_suffix (>= 2.0.2, < 4.0)
+    capybara (3.14.0)
       addressable
-      mime-types (>= 1.16)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (~> 2.0)
-    capybara-webkit (1.11.1)
-      capybara (>= 2.3.0, < 2.8.0)
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (~> 1.2)
+      xpath (~> 3.2)
+    capybara-webkit (1.15.1)
+      capybara (>= 2.3, < 4.0)
       json
-    dotenv (2.1.1)
-    haml (4.0.7)
+    dotenv (2.7.1)
+    haml (5.0.4)
+      temple (>= 0.8.0)
       tilt
-    json (1.8.3)
-    mime-types (3.0)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0221)
-    mini_portile2 (2.0.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
-    rack (1.6.4)
-    rack-test (0.6.3)
-      rack (>= 1.0)
-    tilt (2.0.5)
-    xpath (2.0.0)
-      nokogiri (~> 1.3)
+    json (2.2.0)
+    mini_mime (1.0.1)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.1)
+      mini_portile2 (~> 2.4.0)
+    public_suffix (3.0.3)
+    rack (2.0.6)
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
+    regexp_parser (1.3.0)
+    temple (0.8.0)
+    tilt (2.0.9)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
 
 PLATFORMS
   ruby
@@ -37,3 +41,6 @@ DEPENDENCIES
   capybara-webkit
   dotenv
   haml
+
+BUNDLED WITH
+   2.0.1
