@@ -73,7 +73,7 @@ class Scraper
 
   def friends_page_url
     if profile_url.include?('profile.php')
-      "#{profile_url}&sk=friends"
+      "#{profile_url}?sk=friends"
     else
       "#{profile_url}/friends"
     end
