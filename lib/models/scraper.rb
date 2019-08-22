@@ -104,10 +104,12 @@ class Scraper
     interval = 0.1
 
     loop do
+      start_time = Time.now
       sleep interval
-      wait_time += interval
-
       break if current_elems_count != elems_count(selector)
+      elapsed_time = Time.now - start_time
+
+      wait_time += elapsed_time
       break if wait_time >= 5
     end
   end
