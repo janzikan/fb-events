@@ -15,6 +15,11 @@ puts 'Scraping friends IDs'
 friends_ids = scraper.friends
 puts "Friends count: #{friends_ids.count}"
 
+if friends_ids.empty?
+  puts 'No friend profiles to process'
+  exit
+end
+
 # Scrape events
 puts 'Scraping events'
 friends_ids.each do |user_id|
