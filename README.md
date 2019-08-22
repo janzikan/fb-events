@@ -14,7 +14,7 @@ In order to be able to get data from Facebook you need an account. Rename **.env
 ## Usage
 Simply use the following command
 ```
-bin/scrape
+bundle exec bin/scrape
 ```
 
 This will generate file `events.html` containing the list of events.
