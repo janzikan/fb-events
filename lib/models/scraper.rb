@@ -75,7 +75,7 @@ class Scraper
     if profile_url.include?('profile.php')
       "#{profile_url}?sk=friends"
     else
-      "#{profile_url}/friends"
+      "#{profile_url.split('#').first}/friends"
     end
   end
 
