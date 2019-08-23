@@ -21,6 +21,7 @@ class Scraper
     @session.visit(FB_SITE)
     @session.fill_in 'email', with: Config::Facebook.username
     @session.fill_in 'pass', with: Config::Facebook.password
+    sleep 1
     @session.find('input[type=submit]').click
   rescue Capybara::ElementNotFound
     raise LoginFailed
