@@ -12,6 +12,16 @@ class Scraper
 
   FB_SITE = 'https://www.facebook.com'
 
+  # Selectors
+  SELECTOR_FRIENDS = 'div.fsl.fwb.fcb a'
+  SELECTOR_EVENT = 'div._4cbv'
+  SELECTOR_EVENT_LINK = 'a._4cbt'
+  SELECTOR_EVENT_TIME = 'div._4cbu'
+
+  # Regular expressions
+  REGEX_USER_NAME = /[\p{L} ]*/.freeze
+  REGEX_EVENT_URL = /events\/([0-9]*)/.freeze
+
   def initialize
     @session = Capybara::Session.new(:webkit)
     @session.driver.header('User-Agent', 'Mozilla')
@@ -36,10 +46,9 @@ class Scraper
 
   def friends
     @session.visit(friends_page_url)
-    selector = 'div.fsl.fwb.fcb a'
-    load_all_elems(selector)
+    load_all_elems(SELECTOR_FRIENDS)
 
-    @session.all(selector).map do |link|
+    @session.all(SELECTOR_FRIENDS).map do |link|
       next unless link['data-hovercard']
       link['data-hovercard'].match(/id=([0-9]+)/)[1]
     end.compact
@@ -52,14 +61,13 @@ class Scraper
     @session.visit("#{FB_SITE}/#{user_id}/upcoming_events")
     return unless @session.has_css?('a[name=Upcoming]')
 
-    user_name = @session.title.match(/[\p{L} ]*/).to_s
+    user_name = @session.title.match(REGEX_USER_NAME).to_s
     return if user_name.empty?
 
-    selector = 'div._4cbv'
-    load_all_elems(selector)
+    load_all_elems(SELECTOR_EVENT)
     {
       user_name: user_name,
-      events: @session.all(selector).map { |node| event_info(node) }
+      events: @session.all(SELECTOR_EVENT).map { |node| event_info(node) }
     }
   rescue Capybara::Webkit::InvalidResponseError
     raise CannotRetrieveData, 'Cannot retrieve events'
@@ -83,11 +91,11 @@ class Scraper
   end
 
   def event_info(node)
-    link = node.find('a._4cbt')
+    link = node.find(SELECTOR_EVENT_LINK)
     {
-      id: link['href'].match(/events\/([0-9]*)/)[1],
+      id: link['href'].match(REGEX_EVENT_URL)[1],
       name: link.text,
-      datetime: parse_datetime(node.find('div._4cbu').text)
+      datetime: parse_datetime(node.find(SELECTOR_EVENT_TIME).text)
     }
   end
 
