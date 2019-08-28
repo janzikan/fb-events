@@ -12,7 +12,7 @@ class Events
   end
 
   def all
-    @events ||= load_events.sort_by { |k, v| v[:datetime] }.to_h
+    @events ||= load_events.sort_by { |_, v| v[:datetime] }.to_h
   end
 
   private

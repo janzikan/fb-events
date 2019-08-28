@@ -49,6 +49,7 @@ class Scraper
 
     @session.all(SELECTOR_FRIENDS).map do |link|
       next unless link['data-hovercard']
+
       link['data-hovercard'].match(/id=([0-9]+)/)[1]
     end.compact
   rescue Capybara::Webkit::InvalidResponseError
@@ -118,8 +119,8 @@ class Scraper
       start_time = Time.now
       sleep interval
       break if current_elems_count != elems_count(selector)
-      elapsed_time = Time.now - start_time
 
+      elapsed_time = Time.now - start_time
       wait_time += elapsed_time
       break if wait_time >= 5
     end

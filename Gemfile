@@ -8,3 +8,7 @@ gem 'hiredis'
 gem 'multi_json'
 gem 'redis'
 gem 'sidekiq'
+
+group :development do
+  gem 'rubocop', require: false
+end

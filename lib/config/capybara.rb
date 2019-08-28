@@ -17,4 +17,3 @@ module Config
     end
   end
 end
-

@@ -1,0 +1,19 @@
+inherit_from: .rubocop_todo.yml
+
+Metrics/LineLength:
+  Max: 99
+
+Metrics/MethodLength:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/Proc:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
