@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'time'
 require_relative '../config/facebook'
 require_relative '../config/capybara'
 
@@ -44,7 +43,7 @@ class Scraper
     end
   end
 
-  def friends
+  def friend_ids
     @session.visit(friends_page_url)
     load_all_elems(SELECTOR_FRIENDS)
 
@@ -57,7 +56,6 @@ class Scraper
   end
 
   def events(user_id)
-    sleep 1
     @session.visit("#{FB_SITE}/#{user_id}/upcoming_events")
     return unless @session.has_css?('a[name=Upcoming]')
 
@@ -65,6 +63,7 @@ class Scraper
     return if user_name.empty?
 
     load_all_elems(SELECTOR_EVENT)
+
     {
       user_name: user_name,
       events: @session.all(SELECTOR_EVENT).map { |node| event_info(node) }
@@ -92,10 +91,11 @@ class Scraper
 
   def event_info(node)
     link = node.find(SELECTOR_EVENT_LINK)
+
     {
       id: link['href'].match(REGEX_EVENT_URL)[1],
       name: link.text,
-      datetime: parse_datetime(node.find(SELECTOR_EVENT_TIME).text)
+      datetime: node.find(SELECTOR_EVENT_TIME).text
     }
   end
 
@@ -131,28 +131,5 @@ class Scraper
 
   def scroll_page
     @session.execute_script 'window.scrollBy(0,10000)'
-  end
-
-  def parse_datetime(str)
-    date = parse_date(str)
-    time = Time.parse(str)
-    Time.mktime(date.year, date.month, date.day, time.hour, time.min)
-  rescue ArgumentError
-    nil
-  end
-
-  def parse_date(str)
-    today = Date.today
-
-    if str.start_with?('At')
-      date = today
-    elsif str.start_with?('Tomorrow')
-      date = today + 1
-    else
-      date = Date.parse(str)
-      date += 7 if date < today
-    end
-
-    date
   end
 end

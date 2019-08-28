@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'haml'
+
+require_relative '../lib/models/events'
+
+events = Events.new.all
+
+if events.empty?
+  puts 'No events to export'
+  exit
+end
+
+# Generate HTML
+puts 'Generating HTML'
+engine = Haml::Engine.new(File.read('template.haml'))
+html = engine.render(Object.new, events: events)
+File.open('events.html', 'w') { |file| file.write(html) }

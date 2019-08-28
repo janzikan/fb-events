@@ -2,9 +2,12 @@
 
 # frozen_string_literal: true
 
-require 'haml'
+require 'sidekiq'
+require 'sidekiq/api'
+
+require_relative '../lib/config/redis'
 require_relative '../lib/models/scraper'
-require_relative '../lib/models/events_list'
+require_relative '../lib/jobs/scrape_events'
 
 scraper = Scraper.new
 
@@ -14,43 +17,25 @@ scraper.login
 
 # Get list of friends
 puts 'Scraping friends IDs'
-friends_ids = scraper.friends
-puts "Friends count: #{friends_ids.count}"
+friend_ids = scraper.friend_ids
+puts "Friends count: #{friend_ids.count}"
 
-if friends_ids.empty?
+if friend_ids.empty?
   puts 'No friend profiles to process'
   exit
 end
 
+# Delete data from Redis
+redis = Config::Redis.connection
+key = Config::Redis::KEY_EVENTS
+events_keys = redis.hkeys(key).map { |id| "#{key}_#{id}" }
+redis.del(events_keys) unless events_keys.empty?
+redis.del(key)
+
+# Reset Sidekiq stats
+Sidekiq::Stats.new.reset('failed', 'processed')
+Sidekiq::DeadSet.new.clear
+
 # Scrape events
-puts 'Scraping events'
-friends_ids.each do |user_id|
-  begin
-    data = scraper.events(user_id)
-  rescue Scraper::CannotRetrieveData
-    print 'x'
-    next
-  end
-
-  if data
-    print '*'
-    EventsList.add_events(data[:user_name], data[:events])
-  else
-    print '.'
-  end
-end
-
-events = EventsList.events
-
-if events.empty?
-  puts ''
-  puts 'No events to export'
-  exit
-end
-
-# Generate HTML
-puts ''
-puts 'Generating HTML'
-engine = Haml::Engine.new(File.read('template.haml'))
-html = engine.render(Object.new, events: events)
-File.open('events.html', 'w') { |file| file.write(html) }
+puts 'Starting event scraping jobs'
+friend_ids.each { |id| ScrapeEvents.perform_async(id) }

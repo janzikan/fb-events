@@ -46,14 +46,14 @@
         %th Date and time
         %th Participants
       - counter = 0
-      - events.each do |event|
+      - events.each do |id, event|
       - counter = counter + 1
         %tr{ class: counter % 2 == 0 ? 'odd' : 'even' }
           %td
-            %a{ href: "https://www.facebook.com/events/#{event.id}" }
-              = event.name
-          %td= event.datetime ? event.datetime.strftime('%d.%m.%Y, %H:%M') : ''
+            %a{ href: "https://www.facebook.com/events/#{id}" }
+              = event[:name]
+          %td= event[:datetime] ? event[:datetime].strftime('%d.%m.%Y, %H:%M') : ''
           %td
             %ul
-              - event.participants.each do |participant|
+              - event[:participants].each do |participant|
                 %li= participant

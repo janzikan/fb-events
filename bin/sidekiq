@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+concurrency = '1'
+queue = 'fb_events_scraping'
+file = File.expand_path('../lib/jobs/scrape_events.rb', __dir__)
+
+exec("bundle exec sidekiq -c #{concurrency} -q #{queue} -r #{file}")
+
